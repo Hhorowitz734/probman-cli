@@ -23,8 +23,10 @@ async fn main() {
                 eprintln!("Failed to fetch problem: {}", e);
             }
         }
-        Commands::Push { file } => {
-            push::handle(file);
+        Commands::Push { problem_id, file } => {
+            if let Err(e) = push::handle(problem_id, file, &config).await {
+                eprintln!("Failed to push problem: {}", e);
+            }
         }
     }
 }

@@ -15,6 +15,9 @@ pub enum Commands {
         problem: String,
     },
     Push {
+        #[arg (help = "Problem UUID")]
+        problem_id: String,
+
         #[arg(help = "Path to the solution file")]
         file: String,
     },
