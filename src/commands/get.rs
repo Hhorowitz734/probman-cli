@@ -23,22 +23,27 @@ fn slugify(title: &str) -> String {
 
 pub fn generate_stub(problem: &Problem)
     -> io::Result<()> {
-    
-    // Create filename + file
+
     let filename = format!("{}.py", slugify(&problem.title));
     let mut file = File::create(&filename)?;
 
-    // Write stub to file
-    writeln!(file, "# {}\n", problem.description)?;
+    // Comment each line of the description
+    for line in problem.description.lines() {
+        writeln!(file, "# {}", line)?;
+    }
+
+    // Add a blank line after the comment block
+    writeln!(file)?;
+
+    // Write the solution stub
     writeln!(file, "def solution():")?;
-    writeln!(file, "\tpass #TODO: implement your code")?;
+    writeln!(file, "    pass  # TODO: implement your code")?;
     writeln!(file, "\n\nsolution()")?;
 
     println!("Created {}", filename);
 
     Ok(())
 }
-
 
 pub async fn handle(problem: String, config: &Config) 
     -> Result<(), Box<dyn std::error::Error>> {
