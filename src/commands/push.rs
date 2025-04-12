@@ -59,9 +59,23 @@ pub async fn handle(problem_id: String, file: String, config: &Config)
         }
 
         let json: Value = poll_resp.json().await?;
-        let verdict = json["verdict"].as_str().unwrap_or("Pending");
 
-        println!("Verdict: {}", verdict);
+        let verdict = json["verdict"]
+            .as_str()
+            .unwrap_or("Pending")
+            .to_string();
+
+        let detail = json["verdict_detail"]
+            .as_str()
+            .unwrap_or("")
+            .trim()
+            .to_string();
+
+        println!("\nFinal Verdict: {}\n", verdict);
+
+        if !detail.is_empty() {
+            println!("Details:\n{}\n", detail);
+        }
 
         if verdict != "Pending" && verdict != "Running" {
             break;
